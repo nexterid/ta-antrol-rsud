@@ -1,33 +1,42 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class M_loginadmin extends CI_Model {
+class M_loginadmin extends CI_Model
+{
 
-    function login(){
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('bcrypt');
+    }
 
-        try {
-            $email = $this->input->post('email', true);
-            $password = $this->input->post('password', true);
-            $result = $this->db->get_where('admin',array(
-                                'email' => $email,
-                                'password' => $password,
-                                'status' => 1))->row();
-
-            if($result){
-                $this->session->set_userdata('login_admin',true);
-                $this->session->set_userdata('email',$result->email);
-                $this->session->set_userdata('nama',$result->nama);
-                $this->session->set_userdata('gambar',$result->gambar);
-                $this->session->set_userdata('theme','sb_admin');
-
-
-                redirect('admin/dashboard');
+    function login()
+    {
+        $email = $this->input->post('email', true);
+        $password = $this->input->post('password', true);
+        $result = $this->db->get_where('admin', array('email' => $email, 'status' => 1))->row();
+        // var_dump($this->bcrypt->hash_password($password));
+        // die;
+        if ($result) {
+            $paswd = $result->password;
+            if ($this->bcrypt->check_password($password, $paswd)) {
+                $data = array(
+                    'login_admin' => true,
+                    'email' => $result->email,
+                    'nama' => $result->nama,
+                    'gambar' => $result->gambar,
+                    'uid' => $result->id,
+                    'theme' => 'sb_admin',
+                );
+                $this->session->set_userdata($data);
+                redirect('admin/dashboard', 'refresh');
             } else {
-                return "Maaf, Email atau Password Anda Salah !";
+                $this->session->set_flashdata('error', 'User atau  Password salah, Silahkan coba lagi ');
+                redirect('admin/login');
             }
-
-        } catch(Exception $e){
-            return $e->getMessage();
+        } else {
+            $this->session->set_flashdata('error', 'User atau  Password salah, Silahkan coba lagi ');
+            redirect('admin/login');
         }
     }
 }

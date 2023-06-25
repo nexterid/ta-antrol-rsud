@@ -9,6 +9,7 @@ class Index extends CI_Controller
 	{
 		parent::__construct();
 		// $this->load->library('fpdf');
+		$this->load->library('form_validation');
 	}
 
 	public function index()
@@ -93,6 +94,12 @@ class Index extends CI_Controller
 
 	public function registrasi()
 	{
+		// $this->form_validation->set_rules('no_identitas', 'No KTP', 'required|numeric|exact_length[16]');
+		// if ($this->form_validation->run() == FALSE) {
+		// 	$this->load->view('user/registrasi');
+		// } else {
+		// 	return "ok";
+		// }
 		$no_identitas = $this->input->post('no_identitas'); //langkah 2
 		$nama = $this->input->post('nama');
 		$jenis_kelamin = $this->input->post('jenis_kelamin');

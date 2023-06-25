@@ -106,7 +106,8 @@
       <?php } ?>
       <?php if (empty($this->session->userdata('id_pasien'))) { ?>
         <h4 class="masthead mb-0" style="margin-top: 10px !important;padding: 20px;">Selamat Datang di RSUD Kraton Pekalongan
-          <br> Jika anda belum memiliki akun, silakan Registrasi terlebih dahulu.</h4>
+          <br> Jika anda belum memiliki akun, silakan Registrasi terlebih dahulu.
+        </h4>
         <button type="button" class="btn btncostume" data-toggle="modal" data-target="#registrasiModal">
           Registrasi
         </button>
@@ -225,7 +226,7 @@
                       <select name="id_poli" id="id_poli" class="form-control" onchange="noAntrian(this.value)">
                         <option value=""> pilih </option>
                         <?php foreach ($getPoli as $row) {
-                            ?>
+                        ?>
                           <option value="<?php echo $row->id_poli; ?>"> <?php echo $row->kode_poli; ?> </option>
                         <?php } ?>
                       </select>
@@ -321,14 +322,16 @@
         <div class="col-lg-6 mb-5 mb-lg-0">
           <h4 class="text-uppercase mb-4">Alamat</h4>
           <p class="lead mb-0">Jl. Veteran No.31, Pekalongan
-            <br>51117 Kota Pekalongan</p>
+            <br>51117 Kota Pekalongan
+          </p>
         </div>
 
         <!-- Footer About Text -->
         <div class="col-lg-6">
           <h4 class="text-uppercase mb-4">Telephone</h4>
           <p class="lead mb-0">(0285) 421621 - 423523
-            <br>rsud_kraton@pekalongankab.go.id</p>
+            <br>rsud_kraton@pekalongankab.go.id
+          </p>
         </div>
 
       </div>
@@ -363,7 +366,7 @@
           <form action="<?php echo base_url('Index/registrasi') ?>" method="post">
             <div>
               <label>Nomor KTP <sup>*</sup></label>
-              <input type="number" id="no_identitas" name="no_identitas" class="form-control" value="" placeholder="Nomor KTP" required=>
+              <input type="text" id="no_identitas" name="no_identitas" class="form-control" value="" placeholder="Nomor KTP" required=>
             </div>
 
             <div>

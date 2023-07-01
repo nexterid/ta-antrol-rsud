@@ -12,7 +12,7 @@
   <link rel="shortcut icon" href="assets/images/favicon.ico">
 
   <!-- Custom fonts for this theme -->
-  <link href="<?php echo base_url('assets/user') ?>/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
@@ -20,6 +20,7 @@
   <link href="<?php echo base_url('assets/user') ?>/css/freelancer.min.css" rel="stylesheet">
   <link href="<?php echo base_url('assets/user') ?>/lib/noty.css" rel="stylesheet">
   <link href="<?php echo base_url('assets/user') ?>/lib/themes/metroui.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/lib/datepicker/datepicker.min.css'); ?>">
 
 </head>
 <style type="text/css">
@@ -195,83 +196,9 @@
         <!-- /.row -->
 
       </div>
-    <?php } else { ?>
-      <div class="container">
-
-        <!-- Portfolio Section Heading -->
-        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Ambil Antrian</h2>
-
-        <!-- Icon Divider -->
-        <div class="divider-custom">
-          <div class="divider-custom-line"></div>
-          <div class="divider-custom-icon">
-            <i class="fas fa-star"></i>
-          </div>
-          <div class="divider-custom-line"></div>
-        </div>
-
-        <!-- Portfolio Grid Items -->
-        <div class="row">
-          <div class="container">
-            <div class="row justify-content-md-center">
-              <div class="col-md-12" style="margin-top: 20px">
-                <!-- <h1 align="center">Login </h1> -->
-                <form action="<?php echo base_url('Index/saveAntrian') ?>" method="post">
-                  <div class="row">
-                    <div class="col-md-2">
-                      <h6><label>Pilih Poli</label></h6>
-                    </div>
-
-                    <div class="col-md-5">
-                      <select name="id_poli" id="id_poli" class="form-control" onchange="noAntrian(this.value)">
-                        <option value=""> pilih </option>
-                        <?php foreach ($getPoli as $row) {
-                        ?>
-                          <option value="<?php echo $row->id_poli; ?>"> <?php echo $row->kode_poli; ?> </option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-2">
-                      <h6><label>No Antrian Poli</label></h6>
-                    </div>
-
-                    <div class="col-md-5">
-                      <input type="text" name="no_antrian_poli2" id="no_antrian_poli2" value="" disabled="" class="form-control">
-                      <input type="hidden" name="no_antrian_poli" id="no_antrian_poli" value="" class="form-control">
-                      <input type="hidden" name="no_antrian" value="<?php echo $no_antrian ?>">
-                    </div>
-                  </div>
-
-
-                  <div class="row text-right">
-                    <div class="col-md-7">
-                      <input type="submit" name="simpan" id="simpan" value="Ambil Antrian" class="btn btn-primary">
-                    </div>
-                  </div>
-                </form>
-
-                <div class="row text-justify">
-                  <h6>Keterangan :</h6>
-                  <ol>
-                    <li>Poli Umum (PLUM)</li>
-                    <li>Poli Gigi (PLGG) </li>
-                    <li>Poli Imunisasi (PLIM)</li>
-                    <li>Poli Tuberculosis (PLTB)</li>
-                  </ol>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-
-        </div>
-        <!-- /.row -->
-      </div>
-    <?php } ?>
+    <?php } else {
+      include('form/ambilantrean.php');
+    } ?>
   </section>
 
   <!-- About Section -->
@@ -423,6 +350,7 @@
 
   <!-- Bootstrap core JavaScript -->
   <script src="<?php echo base_url('assets/user') ?>/vendor/jquery/jquery.min.js"></script>
+
   <script src="<?php echo base_url('assets/user') ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Plugin JavaScript -->
@@ -435,12 +363,43 @@
   <!-- Custom scripts for this template -->
   <script src="<?php echo base_url('assets/user') ?>/js/freelancer.min.js"></script>
   <script src="<?php echo base_url('assets/user') ?>/lib/noty.min.js"></script>
+  <script src="<?php echo base_url('assets/lib/datepicker/datepicker-full.min.js'); ?>"></script>
+
   <script type="text/javascript">
+    new Datepicker(document.getElementById('tanggal'), {
+      format: "dd-mm-yyyy",
+      autohide: true,
+      minDate: new Date()
+    });
+
+    function getJadwalDokter(id) {
+      $.ajax({
+        url: "<?php echo base_url('Index/getNoAntrian'); ?>",
+        type: "POST",
+        data: "id_poli=" + id_poli,
+        datatype: "json",
+        success: function(response) {
+          console.log(response);
+          // alert(data);
+          var output = JSON.parse(response);
+          if (output.no > output.maks) {
+            $("#no_antrian_poli2").val('Data Sudah Penuh');
+            // $("#simpan").toggle('slow');
+            $("#simpan").prop("disabled", true);
+          } else {
+
+            $("#no_antrian_poli").val(output.no_hasil);
+            $("#no_antrian_poli2").val(output.no_hasil);
+            $("#simpan").prop("disabled", false);
+          }
+        } // Munculkan alert error
+      });
+    }
+
     function noAntrian(id_poli) {
       // alert(id_poli);?
       if (id_poli != "") {
         $.ajax({
-
           url: "<?php echo base_url('Index/getNoAntrian'); ?>",
           type: "POST",
           data: "id_poli=" + id_poli,

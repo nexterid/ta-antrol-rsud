@@ -372,27 +372,25 @@
       minDate: new Date()
     });
 
-    function getJadwalDokter(id) {
+    function getJadwalDokter() {     
+      let poli = $("#id_poli").val();
+      let tgl = $("#tanggal").val();
       $.ajax({
-        url: "<?php echo base_url('Index/getNoAntrian'); ?>",
-        type: "POST",
-        data: "id_poli=" + id_poli,
+        url: "<?php echo base_url('Index/getJadwalDokter'); ?>",
+        type: "GET",
+        data: {
+          poli:poli,
+          tanggal:tgl
+        },
         datatype: "json",
-        success: function(response) {
-          console.log(response);
-          // alert(data);
-          var output = JSON.parse(response);
-          if (output.no > output.maks) {
-            $("#no_antrian_poli2").val('Data Sudah Penuh');
-            // $("#simpan").toggle('slow');
-            $("#simpan").prop("disabled", true);
-          } else {
-
-            $("#no_antrian_poli").val(output.no_hasil);
-            $("#no_antrian_poli2").val(output.no_hasil);
-            $("#simpan").prop("disabled", false);
-          }
-        } // Munculkan alert error
+        success: function(res) {
+          let hasil = JSON.parse(res);
+          if(hasil.status==200){            
+            $("#dokter").append('<option value="'+hasil.kode_dokter+'" selected>'+hasil.nama+'</option>');
+          }else{
+            $("#dokter").append('<option value="tutup" selected>Maaf Poli Tutup!</option>');
+          }          
+        } 
       });
     }
 

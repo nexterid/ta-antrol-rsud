@@ -161,13 +161,28 @@ class Index extends CI_Controller
 	{
 		$this->session->sess_destroy();
 		redirect(base_url());
+	} 
+
+	public function getJadwalDokter()
+	{
+		$poli = $this->input->get('poli');
+		$hari = date('N',strtotime($this->input->get('tanggal')));
+		$jadwal = $this->db->where('j.hari',$hari)->where('j.kode_poli',$poli)
+					->select('d.kode_dokter,d.nama')
+					->join('dokter as d','d.kode_dokter=j.kode_dokter')->get('jadwal_dokter as j')->row();
+		if($jadwal){
+			$result = ['status'=>200,'kode_dokter'=>$jadwal->kode_dokter,'nama'=>$jadwal->nama];
+			echo json_encode($result);
+		}else{
+			echo json_encode(['status'=>201]);
+		}
+		
 	}
 
 	public function getNoAntrian()
 	{
 		$id_poli = $this->input->post('id_poli');
 		$tanggal = date("Y-m-d");
-
 		$this->db->where('antrian_poli.id_poli', $id_poli);
 		$this->db->where('antrian_poli.tgl_antrian_poli', $tanggal);
 		$sql = $this->db->get('antrian_poli');
@@ -210,25 +225,50 @@ class Index extends CI_Controller
 	}
 
 	public function saveAntrian()
-	{
-		$id_poli = $this->input->post('id_poli');
-		$no_antrian_poli = substr($this->input->post('no_antrian_poli'), 4);
-		$id_pasien = $this->session->userdata('id_pasien');
-		$tanggal = date("Y-m-d");
-
-		// echo $tanggal; exit();
-
-		$this->db->set('id_poli', $id_poli);
-		$this->db->set('no_antrian_poli', $no_antrian_poli);
-		$this->db->set('id_pasien', $id_pasien);
-		$this->db->set('tgl_antrian_poli', $tanggal);
-		$this->db->insert('antrian_poli');
-
-		$no_antrian = $this->input->post('no_antrian');
-		$this->db->set('no_antrian', $no_antrian + 1);
-		$this->db->set('tgl_antrian', $tanggal);
-		$this->db->insert('antrian');
-
+	{		
+		$tanggal = date('Y-m-d',strtotime($this->input->post('tanggal')));
+		$poli = $this->input->post('id_poli');		
+		$dokter =$this->input->post('dokter');
+		if($poli==''){
+			$this->session->set_flashdata("notif", true);
+			$this->session->set_flashdata('pesan','Poli Tidak Boleh Kosong!');
+			$this->session->set_flashdata("type", 'warning');
+		}else if($dokter=='tutup'){
+			$this->session->set_flashdata("notif", true);
+			$this->session->set_flashdata('pesan','Poli Tutup');
+			$this->session->set_flashdata("type", 'warning');
+		}else{
+			$check = $this->checkAntrian($poli,$tanggal);
+			if($check==true && $check->id_poli == $poli){
+				$this->session->set_flashdata("notif", true);
+				$this->session->set_flashdata('pesan','sudah terdaftar dengan no antrian ="'.$check->no_antrian_poli.'"');
+				$this->session->set_flashdata("type", 'warning');
+			}else if($check){
+				$this->session->set_flashdata("notif", true);
+				$this->session->set_flashdata('pesan','Maaf anda sudah mendaftar di poli lain!');
+				$this->session->set_flashdata("type", 'warning');
+			}else{
+				$noAntrian = $this->noAntrian($poli,$tanggal);
+				$data=[
+					'id_antrian_poli' => $this->noRegistrasi($poli,$tanggal),
+					'id_pasien' => $this->session->userdata('id_pasien'),
+					'kode_dokter' => $this->input->post('dokter'),
+					'id_poli' => $poli,
+					'no_antrian_poli' => $noAntrian,
+					'tgl_antrian_poli' => date('Y-m-d',strtotime($tanggal)),
+					'waktu' => date('H:i:s')
+				];
+				$this->db->insert('antrian_poli',$data);
+				//pesan
+				$pesan = 'Berhasil Ambil Antrian degan No. '.$noAntrian;
+				$this->session->set_flashdata("notif", true);
+				$this->session->set_flashdata('pesan',$pesan);
+				$this->session->set_flashdata("type", 'success');
+			}	
+		}
+		
+		
+		
 		redirect(base_url());
 	}
 
@@ -278,4 +318,27 @@ class Index extends CI_Controller
 			print_r($e->getMessage());
 		}
 	}
+
+	protected function noRegistrasi($kode,$tanggal)
+    {
+        $keywords = $kode . date('ymd');
+        $maxNum = $this->db->select_max('id_antrian_poli')->where('id_poli',$kode)->where('tgl_antrian_poli',$tanggal)->get('antrian_poli')->row();
+        $noUrut = (int) substr($maxNum->id_antrian_poli, -3,3);
+        $noUrut++;
+        $newID = $keywords . sprintf("%03s", $noUrut);
+        return $newID;
+    }
+
+	protected function checkAntrian($poli,$tanggal)
+    {
+		$pasien =$this->session->userdata('id_pasien');
+        return $this->db->where('id_pasien',$pasien)->where('tgl_antrian_poli',$tanggal)->get('antrian_poli')->row();
+    }
+
+	protected function noAntrian($kode,$tanggal)
+    {
+        $maxNum = $this->db->where('id_poli',$kode)->where('tgl_antrian_poli',$tanggal)->get('antrian_poli')->result();
+		$noUrut = count($maxNum);
+       	return $noUrut+1;
+    }
 }

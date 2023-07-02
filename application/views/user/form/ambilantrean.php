@@ -22,7 +22,7 @@
                                 <h6><label>Tanggal Periksa</label></h6>
                             </div>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" id="tanggal" name="tanggal_reg" value="<?php echo date('d-m-Y') ?>" readonly>
+                                <input type="text" class="form-control" id="tanggal" name="tanggal" value="<?php echo date('d-m-Y') ?>" readonly>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -30,7 +30,7 @@
                                 <h6><label>Pilih Poli</label></h6>
                             </div>
                             <div class="col-md-5">
-                                <select name="id_poli" id="id_poli" class="form-control" onchange="getJadwalDokter(this.value)">
+                                <select name="id_poli" id="id_poli" class="form-control" onchange="getJadwalDokter()">
                                     <option value=""> Pilih Poli </option>
                                     <?php foreach ($getPoli as $row) {
                                         ?>
@@ -44,20 +44,11 @@
                                 <h6><label>Dokter Poli</label></h6>
                             </div>
                             <div class="col-md-5">
-                                <select name="id_poli" id="id_poli" class="form-control" onchange="noAntrian(this.value)">
-                                    <option value="">Dokter Poli</option>
+                                <select name="dokter" id="dokter" class="form-control">
+                                    <option value="tutup">Dokter Poli</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="row mb-3s">
-                            <div class="col-md-2">
-                                <h6><label>No Antrian Poli</label></h6>
-                            </div>
-                            <div class="col-md-5">
-                                <input type="text" name="no_antrian_poli2" id="no_antrian_poli2" value="" disabled="" class="form-control">
-                                <input type="hidden" name="no_antrian_poli" id="no_antrian_poli" value="" class="form-control">
-                                <input type="hidden" name="no_antrian" value="<?php echo $no_antrian ?>">
-                            </div>
-                        </div>
+                        </div>                       
                         <div class="row text-right">
                             <div class="col-md-7">
                                 <input type="submit" name="simpan" id="simpan" value="Ambil Antrian" class="btn btn-primary">

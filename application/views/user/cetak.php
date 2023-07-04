@@ -12,11 +12,11 @@
 
   	<div class="card" style="width: 20rem;">
 	  <ul class="list-group list-group-flush">
-	    <li class="list-group-item text-center"><h3>SELAMAT DATANG</h3><h5>Di Puskesmas X</h5>
-	    	<h8>Jalan Kenangan Indah 4E No.16 Rt.07/Rw.98</h8>
+	    <li class="list-group-item text-center"><h3>SELAMAT DATANG</h3><h5>RSUD Kraton Pekalongan</h5>
+	    	<h8>Jl. Veteran No. 31 Pekalongan</h8>
 		</li>
 	    <li class="list-group-item text-center">
-	    	<div class="row card-link"><?php echo $row->tgl_antrian_poli ?></div>
+	    	<div class="row card-link"><?php echo 'Tanggal Periksa : '.$row->tgl_antrian_poli ?></div>
 	    	<h4>ANTRIAN</h4><h1><?php echo $row->no_antrian_poli ?></h1><h6><?php echo $row->nama_poli ?></h6>
 	    </li>
 	    <li class="list-group-item text-center"><h3>TERIMAKASIH</h3></li>

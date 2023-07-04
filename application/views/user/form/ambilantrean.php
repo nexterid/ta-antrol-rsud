@@ -16,7 +16,7 @@
             <div class="row justify-content-md-center">
                 <div class="col-md-12" style="margin-top: 20px">
                     <!-- <h1 align="center">Login </h1> -->
-                    <form action="<?php echo base_url('Index/saveAntrian') ?>" method="post">
+                    <form action="<?php echo base_url('Index/saveAntrian') ?>" method="post">                    
                         <div class="row mb-3">
                             <div class="col-md-2">
                                 <h6><label>Tanggal Periksa</label></h6>
@@ -47,6 +47,13 @@
                                 <select name="dokter" id="dokter" class="form-control">
                                     <option value="tutup">Dokter Poli</option>
                                 </select>
+                            </div>
+                        </div>   
+                        <div class="row mb-3">
+                            <div class="col-md-2">                                
+                            </div>
+                            <div class="col-md-5">
+                            <?php echo validation_errors(); ?>
                             </div>
                         </div>                       
                         <div class="row text-right">

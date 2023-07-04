@@ -229,14 +229,12 @@ class Index extends CI_Controller
 		$tanggal = date('Y-m-d',strtotime($this->input->post('tanggal')));
 		$poli = $this->input->post('id_poli');		
 		$dokter =$this->input->post('dokter');
-		if($poli==''){
-			$this->session->set_flashdata("notif", true);
-			$this->session->set_flashdata('pesan','Poli Tidak Boleh Kosong!');
-			$this->session->set_flashdata("type", 'warning');
-		}else if($dokter=='tutup'){
-			$this->session->set_flashdata("notif", true);
-			$this->session->set_flashdata('pesan','Poli Tutup');
-			$this->session->set_flashdata("type", 'warning');
+		$this->form_validation->set_rules('tanggal','Tanggal Periksa','required|date');
+		$this->form_validation->set_rules('id_poli','Poli','required');
+		$this->form_validation->set_rules('dokter','Dokter','required');
+		$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
+		if ($this->form_validation->run()==false){
+			$this->index();
 		}else{
 			$check = $this->checkAntrian($poli,$tanggal);
 			if($check==true && $check->id_poli == $poli){
@@ -265,17 +263,12 @@ class Index extends CI_Controller
 				$this->session->set_flashdata('pesan',$pesan);
 				$this->session->set_flashdata("type", 'success');
 			}	
-		}
-		
-		
-		
-		redirect(base_url());
+			redirect(base_url());
+		}		
 	}
 
-	public function cetak($id_antrian_poli = NULL)
+	public function cetak($id_antrian_poli)
 	{
-		$this->db->limit(1);
-		$this->db->order_by('id_antrian', 'DESC');
 		$this->db->where('id_antrian_poli', $id_antrian_poli);
 		$this->db->join('kategori_poli', 'kategori_poli.id_poli=antrian_poli.id_poli');
 		$data['row'] = $this->db->get('antrian_poli')->row();

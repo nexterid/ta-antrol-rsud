@@ -267,6 +267,29 @@ class Index extends CI_Controller
 		}		
 	}
 
+	public function getRiwayatKunjungan()
+	{
+		$id= $this->input->get('id');
+		$data = $this->db->where('a.id_pasien',$id)
+				->join('dokter as d','a.kode_dokter=d.kode_dokter')
+				->join('kategori_poli as p','a.id_poli=p.id_poli')
+				->get('antrian_poli as a')
+				->result();
+		if($data){
+			foreach($data as $q){
+				echo '<tr>
+					<td>'.$q->id_antrian_poli.'</td>
+					<td>'.date('d-m-Y',strtotime($q->tgl_antrian_poli)).'</td>
+					<td>'.$q->nama_poli.'</td>
+					<td>'.$q->nama.'</td>
+				</tr>';					
+			}
+		}else{
+			echo '<tr><td colspan="4">Belum ada riwayat Kunjungan</td></tr>';
+		}
+		
+	}
+
 	public function cetak($id_antrian_poli)
 	{
 		$this->db->where('id_antrian_poli', $id_antrian_poli);

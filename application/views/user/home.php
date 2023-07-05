@@ -68,6 +68,9 @@
               <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#"><?php echo $this->session->userdata('nama'); ?></a>
             </li>
             <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#" data-toggle="modal" data-target="#modal-riwayat" onclick="riwayatKunjungan();">RIWAYAT</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
               <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="<?php echo base_url('Index/logout') ?>">Logout</a>
             </li>
           <?php } ?>
@@ -347,6 +350,7 @@
       </div>
     </div>
   </div>
+  <?php include('form/modal-history.php'); ?>
 
   <!-- Bootstrap core JavaScript -->
   <script src="<?php echo base_url('assets/user') ?>/vendor/jquery/jquery.min.js"></script>
@@ -394,34 +398,21 @@
       });
     }
 
-    function noAntrian(id_poli) {
-      // alert(id_poli);?
-      if (id_poli != "") {
-        $.ajax({
-          url: "<?php echo base_url('Index/getNoAntrian'); ?>",
-          type: "POST",
-          data: "id_poli=" + id_poli,
-          datatype: "json",
-          success: function(response) {
-            console.log(response);
-            // alert(data);
-            var output = JSON.parse(response);
-            if (output.no > output.maks) {
-              $("#no_antrian_poli2").val('Data Sudah Penuh');
-              // $("#simpan").toggle('slow');
-              $("#simpan").prop("disabled", true);
-            } else {
-
-              $("#no_antrian_poli").val(output.no_hasil);
-              $("#no_antrian_poli2").val(output.no_hasil);
-              $("#simpan").prop("disabled", false);
-            }
-          } // Munculkan alert error
-        });
-      } else {
-        $("#no_antrian_poli").val("");
-        $("#no_antrian_poli2").val("");
-      }
+    function riwayatKunjungan()
+    {
+      let pasien = $("#user-id").val();
+      console.log(pasien);
+      $.ajax({
+        url: "<?php echo base_url('Index/getRiwayatKunjungan'); ?>",
+        type: "GET",
+        data: {
+          id:pasien,
+        },
+        datatype: "html",
+        success: function(reshtml) {
+             $("#tampil-riwayat").html(reshtml);
+        } 
+      });
     }
   </script>
 

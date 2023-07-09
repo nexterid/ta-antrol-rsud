@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2023-06-26 06:16:23
+Date: 2023-07-10 06:25:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -74,50 +74,21 @@ INSERT INTO `antrian` VALUES ('18', '2022-08-10', '3');
 -- ----------------------------
 DROP TABLE IF EXISTS `antrian_poli`;
 CREATE TABLE `antrian_poli` (
-  `id_antrian_poli` int(11) NOT NULL AUTO_INCREMENT,
-  `id_antrian` int(11) NOT NULL,
+  `id_antrian_poli` varchar(20) NOT NULL,
   `id_pasien` int(11) NOT NULL,
+  `kode_dokter` int(11) NOT NULL,
   `id_poli` int(11) NOT NULL,
-  `no_antrian_poli` varchar(10) NOT NULL,
+  `no_antrian_poli` int(10) NOT NULL,
   `tgl_antrian_poli` date NOT NULL,
+  `waktu` time NOT NULL,
   PRIMARY KEY (`id_antrian_poli`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of antrian_poli
 -- ----------------------------
-INSERT INTO `antrian_poli` VALUES ('1', '0', '1', '2', '1', '2019-07-17');
-INSERT INTO `antrian_poli` VALUES ('2', '0', '1', '2', '2', '2019-07-17');
-INSERT INTO `antrian_poli` VALUES ('3', '0', '1', '2', '3', '2019-07-17');
-INSERT INTO `antrian_poli` VALUES ('4', '0', '1', '4', '1', '2019-07-17');
-INSERT INTO `antrian_poli` VALUES ('5', '0', '1', '3', '1', '2019-07-17');
-INSERT INTO `antrian_poli` VALUES ('6', '0', '1', '3', '30', '2019-07-17');
-INSERT INTO `antrian_poli` VALUES ('8', '0', '1', '4', '2', '2019-07-17');
-INSERT INTO `antrian_poli` VALUES ('9', '0', '1', '2', '1', '2019-07-18');
-INSERT INTO `antrian_poli` VALUES ('10', '0', '2', '2', '30', '2019-07-18');
-INSERT INTO `antrian_poli` VALUES ('11', '0', '6', '3', '1', '2019-07-30');
-INSERT INTO `antrian_poli` VALUES ('12', '0', '1', '1', '1', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('13', '0', '1', '1', '2', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('14', '0', '1', '2', '1', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('15', '0', '1', '3', '1', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('16', '0', '1', '3', '2', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('17', '0', '1', '3', '3', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('18', '0', '14', '1', '3', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('19', '0', '14', '1', '4', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('20', '0', '14', '1', '5', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('21', '0', '14', '2', '2', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('22', '0', '14', '4', '1', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('23', '0', '14', '4', '2', '2019-07-31');
-INSERT INTO `antrian_poli` VALUES ('24', '0', '14', '2', '1', '2019-08-01');
-INSERT INTO `antrian_poli` VALUES ('25', '0', '14', '3', '1', '2019-08-01');
-INSERT INTO `antrian_poli` VALUES ('26', '0', '14', '1', '1', '2019-08-07');
-INSERT INTO `antrian_poli` VALUES ('27', '0', '14', '2', '1', '2019-08-07');
-INSERT INTO `antrian_poli` VALUES ('28', '0', '14', '1', '2', '2019-08-07');
-INSERT INTO `antrian_poli` VALUES ('29', '0', '14', '1', '3', '2019-08-07');
-INSERT INTO `antrian_poli` VALUES ('30', '0', '14', '4', '1', '2019-08-07');
-INSERT INTO `antrian_poli` VALUES ('31', '0', '15', '1', '1', '2022-08-10');
-INSERT INTO `antrian_poli` VALUES ('32', '0', '17', '2', '1', '2022-08-10');
-INSERT INTO `antrian_poli` VALUES ('33', '0', '18', '2', '2', '2022-08-10');
+INSERT INTO `antrian_poli` VALUES ('1230710001', '19', '1', '1', '1', '2023-07-10', '06:01:52');
+INSERT INTO `antrian_poli` VALUES ('2230711001', '19', '2', '2', '1', '2023-07-11', '06:11:35');
 
 -- ----------------------------
 -- Table structure for `dokter`
@@ -131,13 +102,40 @@ CREATE TABLE `dokter` (
   `tgl_lahir` date NOT NULL,
   `alamat` text NOT NULL,
   `no_telp` varchar(15) NOT NULL,
-  `poli` varchar(50) NOT NULL,
-  PRIMARY KEY (`kode_dokter`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+  `poli` int(11) NOT NULL,
+  PRIMARY KEY (`kode_dokter`) USING BTREE,
+  KEY `fk poli` (`poli`),
+  CONSTRAINT `fk poli` FOREIGN KEY (`poli`) REFERENCES `kategori_poli` (`id_poli`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of dokter
 -- ----------------------------
+INSERT INTO `dokter` VALUES ('1', '11121212', 'dr. SILVI RISDIA LINA', 'Perempuan', '1994-07-05', 'Pekalongan', '0', '1');
+INSERT INTO `dokter` VALUES ('2', '11111', 'drg. Ruth Christine R', 'Perempuan', '1959-06-05', 'Pekalongan', '0', '2');
+INSERT INTO `dokter` VALUES ('3', '45454', 'dr. Rosita', 'Perempuan', '1979-04-06', 'Pekalongan', '0', '3');
+INSERT INTO `dokter` VALUES ('4', '55555', 'dr. Afiyah, Sp. PD', 'Perempuan', '1983-06-08', 'Pekalongan', '0', '4');
+
+-- ----------------------------
+-- Table structure for `hari`
+-- ----------------------------
+DROP TABLE IF EXISTS `hari`;
+CREATE TABLE `hari` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_hari` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hari
+-- ----------------------------
+INSERT INTO `hari` VALUES ('1', 'Senin');
+INSERT INTO `hari` VALUES ('2', 'Selasa');
+INSERT INTO `hari` VALUES ('3', 'Rabu');
+INSERT INTO `hari` VALUES ('4', 'Kamis');
+INSERT INTO `hari` VALUES ('5', 'Jumat');
+INSERT INTO `hari` VALUES ('6', 'Sabtu');
+INSERT INTO `hari` VALUES ('7', 'Minggu');
 
 -- ----------------------------
 -- Table structure for `jadwal_dokter`
@@ -145,16 +143,44 @@ CREATE TABLE `dokter` (
 DROP TABLE IF EXISTS `jadwal_dokter`;
 CREATE TABLE `jadwal_dokter` (
   `kode` int(11) NOT NULL AUTO_INCREMENT COMMENT ' ',
-  `hari` int(11) DEFAULT NULL,
-  `kode_poli` varchar(10) DEFAULT NULL,
-  `kode_dokter` varchar(20) DEFAULT NULL,
+  `hari` int(11) DEFAULT NULL COMMENT '1:senin,2:selasa,3:rabu,4:kamis,5:jumat,6:sabtu',
+  `kode_poli` int(11) NOT NULL,
+  `kode_dokter` int(11) DEFAULT NULL,
   `jam_praktek` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`kode`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`kode`) USING BTREE,
+  KEY `fk` (`kode_poli`),
+  KEY `fk2` (`kode_dokter`),
+  CONSTRAINT `fk` FOREIGN KEY (`kode_poli`) REFERENCES `kategori_poli` (`id_poli`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk2` FOREIGN KEY (`kode_dokter`) REFERENCES `dokter` (`kode_dokter`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of jadwal_dokter
 -- ----------------------------
+INSERT INTO `jadwal_dokter` VALUES ('1', '1', '1', '1', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('2', '2', '1', '1', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('3', '3', '1', '1', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('4', '4', '1', '1', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('5', '5', '1', '1', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('6', '6', '1', '1', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('8', '1', '2', '2', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('9', '2', '2', '2', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('10', '3', '2', '2', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('11', '4', '2', '2', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('12', '5', '2', '2', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('13', '6', '2', '2', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('15', '1', '3', '3', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('16', '2', '3', '3', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('17', '3', '3', '3', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('18', '4', '3', '3', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('19', '5', '3', '3', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('20', '6', '3', '3', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('22', '1', '4', '4', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('23', '2', '4', '4', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('24', '3', '4', '4', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('25', '4', '4', '4', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('26', '5', '4', '4', '09.00-12.00');
+INSERT INTO `jadwal_dokter` VALUES ('27', '6', '4', '4', '09.00-12.00');
 
 -- ----------------------------
 -- Table structure for `kategori_poli`
@@ -229,7 +255,7 @@ CREATE TABLE `tjm_menu` (
   `status` tinyint(4) NOT NULL,
   `type` enum('Admin') NOT NULL DEFAULT 'Admin',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of tjm_menu
@@ -240,5 +266,7 @@ INSERT INTO `tjm_menu` VALUES ('3', '1', 'User Admin', 'admin/useradmin', 'fa fa
 INSERT INTO `tjm_menu` VALUES ('4', '1', 'Menu', 'admin/menu', 'fa fa-gear', '100', '1', 'Admin');
 INSERT INTO `tjm_menu` VALUES ('25', '1', 'Master', 'admin/master', 'fa fa-ticket', '2', '0', 'Admin');
 INSERT INTO `tjm_menu` VALUES ('31', '1', 'Data Pasien', 'admin/pasien', 'glyphicon glyphicon-user', '2', '1', 'Admin');
-INSERT INTO `tjm_menu` VALUES ('32', '1', 'Poli', 'admin/poli', 'glyphicon glyphicon-list-alt', '3', '1', 'Admin');
-INSERT INTO `tjm_menu` VALUES ('33', '1', 'Antrian Poli', 'admin/antrian_poli', 'glyphicon glyphicon-list', '4', '1', 'Admin');
+INSERT INTO `tjm_menu` VALUES ('32', '1', 'Poli', 'admin/poli', 'glyphicon glyphicon-list-alt', '5', '1', 'Admin');
+INSERT INTO `tjm_menu` VALUES ('33', '1', 'Antrian Poli', 'admin/antrian_poli', 'glyphicon glyphicon-list', '6', '1', 'Admin');
+INSERT INTO `tjm_menu` VALUES ('34', '1', 'Dokter', 'admin/dokter', 'glyphicon glyphicon-user', '3', '1', 'Admin');
+INSERT INTO `tjm_menu` VALUES ('35', '1', 'Jadwal Dokter', 'admin/jadwaldokter', 'fa fa-calendar', '4', '1', 'Admin');

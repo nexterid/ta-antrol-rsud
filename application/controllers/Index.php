@@ -235,6 +235,11 @@ class Index extends CI_Controller
 		$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
 		if ($this->form_validation->run()==false){
 			$this->index();
+		}else if($dokter=='tutup'){
+			$this->session->set_flashdata("notif", true);
+			$this->session->set_flashdata('pesan','Maaf Poli Tutup Hari libur');
+			$this->session->set_flashdata("type", 'warning');
+			$this->index();
 		}else{
 			$check = $this->checkAntrian($poli,$tanggal);
 			if($check==true && $check->id_poli == $poli){

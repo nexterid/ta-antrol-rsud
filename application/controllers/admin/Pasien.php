@@ -50,6 +50,7 @@ class Pasien extends Super
             $data = array_merge($data,$this->generateData());
             $this->crud->callback_before_insert(array($this,'encrypt_password_callback'));
             $this->generate();
+            $this->crud->unset_columns(['password']);
             $data['output'] = $this->crud->render();
             $this->load->view('admin/'.$this->session->userdata('theme').'/v_index',$data);
     }

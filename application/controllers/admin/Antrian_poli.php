@@ -16,7 +16,7 @@ class Antrian_poli extends Super
         $this->status         = true; 
         $this->field_tambah   = array(); 
         $this->field_edit     = array(); 
-        $this->field_tampil   = array('id_poli','id_pasien','tgl_antrian_poli','no_antrian_poli'); 
+        $this->field_tampil   = array('id_antrian_poli','id_poli','id_pasien','kode_dokter','tgl_antrian_poli','no_antrian_poli','waktu'); 
         $this->folder_upload  = 'assets/uploads/files';
         $this->add            = true;
         $this->edit           = false;
@@ -27,7 +27,7 @@ class Antrian_poli extends Super
     function index(){
             $data = [];
             if($this->crud->getState() == "add")
-            redirect(base_url('admin/Antrian_poli/addAntrianPoli'));
+            // redirect(base_url('admin/Antrian_poli/addAntrianPoli'));
             /** Bagian GROCERY CRUD USER**/
 
 
@@ -36,16 +36,20 @@ class Antrian_poli extends Super
             **/
             $this->crud->set_relation('id_pasien','pasien','nama');
             $this->crud->set_relation('id_poli','kategori_poli','nama_poli');
+             $this->crud->set_relation('kode_dokter','dokter','nama');
 
-            /** Upload **/
-            // $this->crud->set_field_upload('nama_field_upload',$this->folder_upload);  
-            // $this->crud->set_field_upload('gambar',$this->folder_upload);  
-            
-            /** Ubah Nama yang akan ditampilkan**/
-            // ->display_as('nama','Nama Setelah di Edit')
+            $this->crud->display_as('id_antrian_poli','No. Registrasi');
             $this->crud->display_as('id_poli','Poli'); 
             $this->crud->display_as('id_pasien','Nama Pasien'); 
-            
+            $this->crud->display_as('kode_dokter','Nama Dokter'); 
+            $this->crud->display_as('tgl_antrian_poli','Tanggal Periksa'); 
+
+            $this->crud->callback_column(
+                'waktu', function ($value, $row) {
+                    return date('H:i', strtotime($value));
+                }
+            );
+                        
             /** Akhir Bagian GROCERY CRUD Edit Oleh User**/
             $data = array_merge($data,$this->generateBreadcumbs());
             $data = array_merge($data,$this->generateData());

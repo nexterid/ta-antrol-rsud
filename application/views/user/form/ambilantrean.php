@@ -48,7 +48,15 @@
                                     <option value="tutup">Dokter Poli</option>
                                 </select>
                             </div>
-                        </div>   
+                        </div> 
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <h6><label>Jadwal Dokter</label></h6>
+                            </div>
+                            <div class="col-md-5">
+                                <h6 id="jadwal-dokter">00.00</h6>
+                            </div>
+                        </div>  
                         <div class="row mb-3">
                             <div class="col-md-2">                                
                             </div>

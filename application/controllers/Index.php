@@ -168,10 +168,10 @@ class Index extends CI_Controller
 		$poli = $this->input->get('poli');
 		$hari = date('N',strtotime($this->input->get('tanggal')));
 		$jadwal = $this->db->where('j.hari',$hari)->where('j.kode_poli',$poli)
-					->select('d.kode_dokter,d.nama')
+					->select('d.kode_dokter,d.nama,j.jam_praktek')
 					->join('dokter as d','d.kode_dokter=j.kode_dokter')->get('jadwal_dokter as j')->row();
 		if($jadwal){
-			$result = ['status'=>200,'kode_dokter'=>$jadwal->kode_dokter,'nama'=>$jadwal->nama];
+			$result = ['status'=>200,'kode_dokter'=>$jadwal->kode_dokter,'nama'=>$jadwal->nama,'jam_praktek'=>$jadwal->jam_praktek];
 			echo json_encode($result);
 		}else{
 			echo json_encode(['status'=>201]);
@@ -278,7 +278,8 @@ class Index extends CI_Controller
 		$data = $this->db->where('a.id_pasien',$id)
 				->join('dokter as d','a.kode_dokter=d.kode_dokter')
 				->join('kategori_poli as p','a.id_poli=p.id_poli')
-				->get('antrian_poli as a')
+				->order_by('a.tgl_antrian_poli','DESC')
+				->get('antrian_poli as a')				
 				->result();
 		if($data){
 			foreach($data as $q){
@@ -342,9 +343,10 @@ class Index extends CI_Controller
 
 	protected function noRegistrasi($kode,$tanggal)
     {
-        $keywords = $kode . date('ymd');
+        $keywords = $kode . date('ymd',strtotime($tanggal));	
+		$tanggal = date('Y-m-d',strtotime($tanggal));	
         $maxNum = $this->db->select_max('id_antrian_poli')->where('id_poli',$kode)->where('tgl_antrian_poli',$tanggal)->get('antrian_poli')->row();
-        $noUrut = (int) substr($maxNum->id_antrian_poli, -3,3);
+		$noUrut = (int) substr($maxNum->id_antrian_poli, -3,3);		
         $noUrut++;
         $newID = $keywords . sprintf("%03s", $noUrut);
         return $newID;

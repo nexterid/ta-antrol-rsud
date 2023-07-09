@@ -34,9 +34,14 @@ class Antrian_poli extends Super
             /** Relasi Antar Tabel 
             * @parameter (nama_field_ditabel_ini, tabel_relasi, field_dari_tabel_relasinya)
             **/
-            $this->crud->set_relation('id_pasien','pasien','nama');
+              /** Akhir Bagian GROCERY CRUD Edit Oleh User**/
+            $data = array_merge($data,$this->generateBreadcumbs());
+            $data = array_merge($data,$this->generateData());
+            $this->generate();
+
             $this->crud->set_relation('id_poli','kategori_poli','nama_poli');
-             $this->crud->set_relation('kode_dokter','dokter','nama');
+            $this->crud->set_relation('kode_dokter','dokter','nama');
+            $this->crud->set_relation('id_pasien','pasien','nama');
 
             $this->crud->display_as('id_antrian_poli','No. Registrasi');
             $this->crud->display_as('id_poli','Poli'); 
@@ -46,14 +51,9 @@ class Antrian_poli extends Super
 
             $this->crud->callback_column(
                 'waktu', function ($value, $row) {
-                    return date('H:i', strtotime($value));
+                    return date('H:i:s', strtotime($value));
                 }
-            );
-                        
-            /** Akhir Bagian GROCERY CRUD Edit Oleh User**/
-            $data = array_merge($data,$this->generateBreadcumbs());
-            $data = array_merge($data,$this->generateData());
-            $this->generate();
+            );     
             $data['output'] = $this->crud->render();
             $this->load->view('admin/'.$this->session->userdata('theme').'/v_index',$data);
     }

@@ -391,8 +391,10 @@
           let hasil = JSON.parse(res);
           if(hasil.status==200){            
             $("#dokter").append('<option value="'+hasil.kode_dokter+'" selected>'+hasil.nama+'</option>');
+            $("#jadwal-dokter").text(hasil.jam_praktek)
           }else{
             $("#dokter").append('<option value="tutup" selected>Maaf Poli Tutup!</option>');
+            $("#jadwal-dokter").text('00.00')
           }          
         } 
       });

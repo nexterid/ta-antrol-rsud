@@ -55,6 +55,7 @@
                             </div>
                             <div class="col-md-5">
                                 <h6 id="jadwal-dokter">00.00</h6>
+                                <input type="hidden" name="jam_praktek" id="jam-praktek">
                             </div>
                         </div>  
                         <div class="row mb-3">

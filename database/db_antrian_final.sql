@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2023-07-10 06:25:01
+Date: 2023-07-10 07:04:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -81,14 +81,16 @@ CREATE TABLE `antrian_poli` (
   `no_antrian_poli` int(10) NOT NULL,
   `tgl_antrian_poli` date NOT NULL,
   `waktu` time NOT NULL,
+  `jam_praktek` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id_antrian_poli`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of antrian_poli
 -- ----------------------------
-INSERT INTO `antrian_poli` VALUES ('1230710001', '19', '1', '1', '1', '2023-07-10', '06:01:52');
-INSERT INTO `antrian_poli` VALUES ('2230711001', '19', '2', '2', '1', '2023-07-11', '06:11:35');
+INSERT INTO `antrian_poli` VALUES ('1230710001', '19', '1', '1', '1', '2023-07-10', '06:01:52', null);
+INSERT INTO `antrian_poli` VALUES ('2230711001', '19', '2', '2', '1', '2023-07-11', '06:11:35', null);
+INSERT INTO `antrian_poli` VALUES ('2230714001', '19', '2', '2', '1', '2023-07-14', '07:00:47', '09.00-12.00');
 
 -- ----------------------------
 -- Table structure for `dokter`

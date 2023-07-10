@@ -259,7 +259,8 @@ class Index extends CI_Controller
 					'id_poli' => $poli,
 					'no_antrian_poli' => $noAntrian,
 					'tgl_antrian_poli' => date('Y-m-d',strtotime($tanggal)),
-					'waktu' => date('H:i:s')
+					'waktu' => date('H:i:s'),
+					'jam_praktek' => $this->input->post('jam_praktek')
 				];
 				$this->db->insert('antrian_poli',$data);
 				//pesan
@@ -288,10 +289,11 @@ class Index extends CI_Controller
 					<td>'.date('d-m-Y',strtotime($q->tgl_antrian_poli)).'</td>
 					<td>'.$q->nama_poli.'</td>
 					<td>'.$q->nama.'</td>
+					<td>'.$q->jam_praktek.'</td>
 				</tr>';					
 			}
 		}else{
-			echo '<tr><td colspan="4">Belum ada riwayat Kunjungan</td></tr>';
+			echo '<tr><td colspan="5">Belum ada riwayat Kunjungan</td></tr>';
 		}
 		
 	}

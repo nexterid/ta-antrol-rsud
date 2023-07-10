@@ -16,6 +16,7 @@
                     <td>Tanggal Kunjungan</td>
                     <td>Poli</td>
                     <td>Dokter</td>
+                    <td>Jam Praktek</td>
                 </tr>
                 <tbody id="tampil-riwayat">
 
